@@ -71,7 +71,18 @@ runs:
       run: |
         set -e
         BUILD_TYPE_FOLDER="${{ inputs.build_type }}"
-        mv app/build/outputs/apk/${BUILD_TYPE_FOLDER}/app-${BUILD_TYPE_FOLDER}.apk app/build/outputs/apk/${BUILD_TYPE_FOLDER}/netbird-${{ inputs.version_name }}.apk
+
+        # Find the actual APK file (handle different naming conventions)
+        APK_FILE=$(find app/build/outputs/apk/${BUILD_TYPE_FOLDER}/ -name "*.apk" -type f | head -n 1)
+
+        if [ -z "$APK_FILE" ]; then
+          echo "Error: No APK file found in app/build/outputs/apk/${BUILD_TYPE_FOLDER}/"
+          ls -la app/build/outputs/apk/${BUILD_TYPE_FOLDER}/ || true
+          exit 1
+        fi
+
+        echo "Found APK: $APK_FILE"
+        mv "$APK_FILE" app/build/outputs/apk/${BUILD_TYPE_FOLDER}/netbird-${{ inputs.version_name }}.apk
 
     - name: Set build info
       id: build-info
