@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.fragment.app.FragmentManager;
 import io.netbird.client.R;
 import io.netbird.client.databinding.ListItemPeerBinding;
 
@@ -31,13 +32,15 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersAdapter.PeerViewHold
 
     private final List<Peer> peerList;
     private final List<Peer> filteredPeerList;
+    private final FragmentManager fragmentManager;
 
     private FilterStatus filterStatus = ALL;
     private String filterQueryString = "";
 
-    public PeersAdapter(List<Peer> peerList) {
+    public PeersAdapter(List<Peer> peerList, FragmentManager fragmentManager) {
         this.peerList = peerList;
-        filteredPeerList = new ArrayList<>(peerList);
+        this.filteredPeerList = new ArrayList<>(peerList);
+        this.fragmentManager = fragmentManager;
         sortPeers();
     }
 
@@ -52,7 +55,7 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersAdapter.PeerViewHold
     @Override
     public void onBindViewHolder(@NonNull PeerViewHolder holder, int position) {
         Peer peer = filteredPeerList.get(position);
-        holder.bind(peer);
+        holder.bind(peer, fragmentManager);
     }
 
     @Override
@@ -163,7 +166,7 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersAdapter.PeerViewHold
             this.binding = binding;
         }
 
-        public void bind(Peer peer) {
+        public void bind(Peer peer, FragmentManager fragmentManager) {
             binding.status.setText(peer.getStatus().toString());
             binding.ip.setText(peer.getIp());
             binding.fqdn.setText(peer.getFqdn());
@@ -174,7 +177,13 @@ public class PeersAdapter extends RecyclerView.Adapter<PeersAdapter.PeerViewHold
                 binding.verticalLine.setBackgroundResource(R.drawable.peer_status_disconnected); // Red for disconnected
             }
 
-            // Long press listener
+            // Click listener to show details dialog
+            binding.getRoot().setOnClickListener(v -> {
+                PeerDetailsDialogFragment dialog = PeerDetailsDialogFragment.newInstance(peer);
+                dialog.show(fragmentManager, "PeerDetailsDialog");
+            });
+
+            // Long press listener for clipboard menu
             binding.getRoot().setOnLongClickListener(v -> {
                 showPopup(v, peer);
                 return true;

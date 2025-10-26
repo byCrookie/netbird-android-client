@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/nb_gray_bg"
+    android:padding="24dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <TextView
+            android:id="@+id/dialog_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/peer_connection_details"
+            android:textColor="@color/nb_txt_light"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="16dp" />
+
+        <!-- FQDN -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_fqdn"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_fqdn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="peer.example.com"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- IP Address -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_ip"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_ip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="100.64.0.1"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Public Key -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_public_key"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_public_key"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="ABC123..."
+                android:textColor="@color/nb_txt_light"
+                android:textSize="14sp"
+                android:fontFamily="monospace"
+                android:layout_marginTop="4dp"
+                android:ellipsize="middle"
+                android:maxLines="1" />
+        </LinearLayout>
+
+        <!-- Connection Status -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_status"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Connected"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Connection Type -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_connection_type"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_connection_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Direct (P2P)"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Latency -->
+        <LinearLayout
+            android:id="@+id/latency_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_latency"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_latency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="25 ms"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Data Transfer -->
+        <LinearLayout
+            android:id="@+id/data_transfer_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_data_transfer"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_bytes_rx"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="↓ Received: 1.2 MB"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <TextView
+                android:id="@+id/peer_bytes_tx"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="↑ Sent: 800 KB"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <!-- ICE Candidate Information -->
+        <LinearLayout
+            android:id="@+id/ice_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_ice_info"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <!-- Local ICE -->
+            <TextView
+                android:id="@+id/peer_local_ice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Local: host (192.168.1.100:51820)"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="14sp"
+                android:layout_marginTop="4dp" />
+
+            <!-- Remote ICE -->
+            <TextView
+                android:id="@+id/peer_remote_ice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Remote: host (192.168.1.200:51820)"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="14sp"
+                android:layout_marginTop="2dp" />
+        </LinearLayout>
+
+        <!-- Last WireGuard Handshake -->
+        <LinearLayout
+            android:id="@+id/handshake_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_last_handshake"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_last_handshake"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="2 minutes ago"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Last Status Update -->
+        <LinearLayout
+            android:id="@+id/status_update_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_last_status_update"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_status_update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Just now"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Quantum Resistance -->
+        <LinearLayout
+            android:id="@+id/rosenpass_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="12dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/peer_quantum_resistance"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="12sp"
+                android:alpha="0.7" />
+
+            <TextView
+                android:id="@+id/peer_rosenpass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Enabled"
+                android:textColor="@color/nb_txt_light"
+                android:textSize="16sp"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+
+        <!-- Close Button -->
+        <Button
+            android:id="@+id/btn_close"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/close"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_bg_orange"
+            android:layout_marginTop="16dp"
+            android:padding="12dp" />
+
+    </LinearLayout>
+</ScrollView>
