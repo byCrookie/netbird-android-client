@@ -1,26 +1,23 @@
-name: 'Build Android App'
-description: 'Build Android APK and AAB'
+name: "Build Android App"
+description: "Build Android APK and AAB"
 inputs:
   version_name:
-    description: 'Version name for the build'
+    description: "Version name for the build"
     required: true
   version_code:
-    description: 'Version code for the build'
+    description: "Version code for the build"
     required: false
-    default: ''
+    default: ""
   build_type:
-    description: 'Build type: debug or release'
+    description: "Build type: debug or release"
     required: true
 outputs:
   apk_path:
-    description: 'Path to the built APK'
+    description: "Path to the built APK"
     value: ${{ steps.build-info.outputs.apk_path }}
-  bundle_path:
-    description: 'Path to the built AAB bundle'
-    value: ${{ steps.build-info.outputs.bundle_path }}
 
 runs:
-  using: 'composite'
+  using: "composite"
   steps:
     - name: Print inputs
       shell: bash
@@ -63,19 +60,29 @@ runs:
       shell: bash
       run: PATH=$PATH:$(go env GOPATH)/bin bash -x build-android-lib.sh
 
-    - name: Build APK and Bundle
+    - name: Build APK
       shell: bash
       run: |
         BUILD_TYPE=${{ inputs.build_type == 'release' && 'Release' || 'Debug' }}
-        ./gradlew --no-daemon assemble${BUILD_TYPE} bundle${BUILD_TYPE} -PversionName="${{ inputs.version_name }}" -PversionCode="${{ inputs.version_code }}"
+        ./gradlew --no-daemon assemble${BUILD_TYPE} -PversionName="${{ inputs.version_name }}" -PversionCode="${{ inputs.version_code }}"
 
     - name: Rename artifacts
       shell: bash
       run: |
         set -e
         BUILD_TYPE_FOLDER="${{ inputs.build_type }}"
-        mv app/build/outputs/apk/${BUILD_TYPE_FOLDER}/app-${BUILD_TYPE_FOLDER}.apk app/build/outputs/apk/${BUILD_TYPE_FOLDER}/netbird-${{ inputs.version_name }}.apk
-        mv app/build/outputs/bundle/${BUILD_TYPE_FOLDER}/app-${BUILD_TYPE_FOLDER}.aab app/build/outputs/bundle/${BUILD_TYPE_FOLDER}/netbird-${{ inputs.version_name }}.aab
+
+        # Find the actual APK file (handle different naming conventions)
+        APK_FILE=$(find app/build/outputs/apk/${BUILD_TYPE_FOLDER}/ -name "*.apk" -type f | head -n 1)
+
+        if [ -z "$APK_FILE" ]; then
+          echo "Error: No APK file found in app/build/outputs/apk/${BUILD_TYPE_FOLDER}/"
+          ls -la app/build/outputs/apk/${BUILD_TYPE_FOLDER}/ || true
+          exit 1
+        fi
+
+        echo "Found APK: $APK_FILE"
+        mv "$APK_FILE" app/build/outputs/apk/${BUILD_TYPE_FOLDER}/netbird-${{ inputs.version_name }}.apk
 
     - name: Set build info
       id: build-info
@@ -83,4 +90,3 @@ runs:
       run: |
         BUILD_TYPE="${{ inputs.build_type }}"
         echo "apk_path=app/build/outputs/apk/${BUILD_TYPE}/netbird-${{ inputs.version_name }}.apk" >> $GITHUB_OUTPUT
-        echo "bundle_path=app/build/outputs/bundle/${BUILD_TYPE}/netbird-${{ inputs.version_name }}.aab" >> $GITHUB_OUTPUT

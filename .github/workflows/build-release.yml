@@ -3,6 +3,12 @@ name: build release
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version (e.g., 1.0.0)"
+        required: true
+        type: string
 
 jobs:
   build-release:
@@ -14,7 +20,6 @@ jobs:
       NETBIRD_UPLOAD_STORE_PASSWORD: ${{ secrets.NETBIRD_UPLOAD_STORE_PASSWORD }}
     outputs:
       apk_path: ${{ steps.build.outputs.apk_path }}
-      bundle_path: ${{ steps.build.outputs.bundle_path }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,12 +29,14 @@ jobs:
       - name: Get version
         id: version
         run: |
-          TAG_NAME=${{ github.event.release.tag_name }}
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            VERSION="${VERSION#v}"
+            TAG_NAME="v${VERSION}"
+          else
+            TAG_NAME=${{ github.event.release.tag_name }}
+          fi
           echo "version_name=$TAG_NAME" >> $GITHUB_OUTPUT
-
-      - name: Write google-services.json
-        run: |
-          echo "${{ secrets.GOOGLE_JSON }}" | base64 -d > app/google-services.json
 
       - name: Write keystore file
         run: |
@@ -50,10 +57,43 @@ jobs:
           version_code: ${{ steps.version_code.outputs.adjusted }}
           build_type: release
 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts-${{ steps.version.outputs.version_name }}
+          path: ${{ steps.build.outputs.apk_path }}
+          retention-days: 30
+
+      - name: Create or update release
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_NAME="${{ steps.version.outputs.version_name }}"
+
+          # Check if release exists
+          if gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            echo "Release $TAG_NAME exists, uploading APK..."
+            gh release upload "$TAG_NAME" "${{ steps.build.outputs.apk_path }}" --clobber
+          else
+            echo "Creating new release $TAG_NAME..."
+            # Create tag if it doesn't exist
+            if ! git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+              git config user.name "github-actions[bot]"
+              git config user.email "github-actions[bot]@users.noreply.github.com"
+              git tag "$TAG_NAME"
+              git push origin "$TAG_NAME"
+            fi
+            
+            gh release create "$TAG_NAME" \
+              --title "Release $TAG_NAME" \
+              --notes "Release $TAG_NAME" \
+              "${{ steps.build.outputs.apk_path }}"
+          fi
+
       - name: Upload files to existing release
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            ${{ steps.build.outputs.apk_path }}
-            ${{ steps.build.outputs.bundle_path }}
+          files: ${{ steps.build.outputs.apk_path }}
           tag_name: ${{ github.event.release.tag_name }}
