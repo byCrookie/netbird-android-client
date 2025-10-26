@@ -17,17 +17,23 @@
     <string name="main_desc_connect">connect-disconnect</string>
     <string name="main_desc_new_route_notification">new route notification</string>
 
-    <string name="fragment_firstinstall_txt">By default you will connect to NetBird\'s cloud servers. You can access the change_server menu to use another server.</string>
+    <string name="fragment_firstinstall_txt">By default you will connect to NetBird\'s cloud
+        servers. You can access the change_server menu to use another server.</string>
     <string name="fragment_firstinstall_continue">Continue</string>
     <string name="fragment_firstinstall_desc_logo">NetBird logo</string>
 
 
     <string name="about_version">Version:&#160;</string>
-    <string name="about_license"><u>License agreement</u></string>
-    <string name="about_privacy_poliy"><u>Privacy policy</u></string>
+    <string name="about_license">
+        <u>License agreement</u>
+    </string>
+    <string name="about_privacy_poliy">
+        <u>Privacy policy</u>
+    </string>
     <string name="about_rights">© 2025 NetBird all rights reserved</string>
 
-    <string name="zero_peers_no_machines">It looks like there are no machines that you can connect to…</string>
+    <string name="zero_peers_no_machines">It looks like there are no machines that you can connect
+        to…</string>
     <string name="zero_peers_btn_learn_why">Learn why</string>
 
     <string name="btn_close">Close</string>
@@ -59,7 +65,8 @@
     <string name="change_server_alert_title">Change Server</string>
     <string name="change_server_alert_yes">Yes</string>
     <string name="change_server_alert_cancel">Cancel</string>
-    <string name="change_server_alert_desc">Changing server will erase the local config and disconnect this device from the current NetBird account.</string>
+    <string name="change_server_alert_desc">Changing server will erase the local config and
+        disconnect this device from the current NetBird account.</string>
 
     <string name="change_server_success_title">Server was changed</string>
     <string name="change_server_success_desc">Click on the connect button to continue</string>
@@ -80,9 +87,11 @@
     <string name="advanced_title_network_security">Network &amp; Security</string>
 
     <string name="advanced_disable_client_routes">Disable client routes</string>
-    <string name="advanced_disable_client_routes_desc">Prevents this device from processing client routes received from the management service</string>
+    <string name="advanced_disable_client_routes_desc">Prevents this device from processing client
+        routes received from the management service</string>
     <string name="advanced_disable_server_routes">Disable server routes</string>
-    <string name="advanced_disable_server_routes_desc">Prevents this device from acting as a router for server routes received from the management service</string>
+    <string name="advanced_disable_server_routes_desc">Prevents this device from acting as a router
+        for server routes received from the management service</string>
     <string name="advanced_disable_dns">Disable DNS</string>
     <string name="advanced_disable_dns_desc">Disables NetBird DNS configuration on this device</string>
     <string name="advanced_disable_firewall">Disable firewall</string>
@@ -90,7 +99,8 @@
     <string name="advanced_allow_ssh">Enable SSH</string>
     <string name="advanced_allow_ssh_desc">Allows SSH connections to this device</string>
     <string name="advanced_block_inbound">Block inbound connections</string>
-    <string name="advanced_block_inbound_desc">Blocks all inbound connections to this device and routed networks. This overrides any policies received from the management service</string>
+    <string name="advanced_block_inbound_desc">Blocks all inbound connections to this device and
+        routed networks. This overrides any policies received from the management service</string>
 
 
     <string name="desc_logo">NetBird logo</string>
@@ -100,7 +110,8 @@
     <string name="dialog_always_on_desc"><![CDATA[You have a VPN app that has Always On turned on. To enable the NetBird app, you first need to go to your <b>Network & Internet settings</b> → <b>Advanced</b> → Check the <b>gear icon</b> for all the apps listed here on this page. Disable Always On for the apps that are not NetBird.]]></string>
 
     <string name="dialog_new_route_img_desc">new route exclamation mark</string>
-    <string name="dialog_new_route_desc">Your network administrator changed a configuration that requires restarting the connection.</string>
+    <string name="dialog_new_route_desc">Your network administrator changed a configuration that
+        requires restarting the connection.</string>
 
     <string name="advanced_theme_system">System</string>
     <string name="advanced_theme_title">Theme Mode</string>
@@ -110,5 +121,29 @@
     <string name="advanced_force_relay_conn">Force relay connection</string>
     <string name="advanced_force_relay_conn_desc">Forces usage of relay when connecting to peers</string>
     <string name="exclamation_mark">exclamation mark</string>
-    <string name="reconnectionNeededWarningMessage">To apply the setting, you will need to reconnect.</string>
+    <string name="reconnectionNeededWarningMessage">To apply the setting, you will need to
+        reconnect.</string>
+
+    <!-- Peer Details Dialog -->
+    <string name="peer_connection_details">Peer Connection Details</string>
+    <string name="peer_fqdn">FQDN</string>
+    <string name="peer_ip">IP Address</string>
+    <string name="peer_public_key">Public Key</string>
+    <string name="peer_status">Status</string>
+    <string name="peer_connection_type">Connection Type</string>
+    <string name="peer_latency">Latency</string>
+    <string name="peer_data_transfer">Data Transfer</string>
+    <string name="peer_ice_info">ICE Candidates</string>
+    <string name="peer_last_handshake">Last WireGuard Handshake</string>
+    <string name="peer_last_status_update">Last Status Update</string>
+    <string name="peer_quantum_resistance">Post-Quantum Cryptography</string>
+    <string name="close">Close</string>
+    <string name="peer_bytes_received">↓ Received: %s</string>
+    <string name="peer_bytes_sent">↑ Sent: %s</string>
+    <string name="peer_local_ice">Local: %s (%s)</string>
+    <string name="peer_remote_ice">Remote: %s (%s)</string>
+    <string name="peer_latency_ms">%d ms</string>
+    <string name="peer_rosenpass_enabled">Enabled</string>
+    <string name="peer_rosenpass_disabled">Disabled</string>
+    <string name="peer_not_available">N/A</string>
 </resources>

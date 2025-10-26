@@ -65,7 +65,7 @@ public class PeersFragment extends Fragment {
         updatePeerCount(peersInfo);
         peersListView = binding.peersRecyclerView;
         peersListView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        PeersAdapter adapter = new PeersAdapter(peerList);
+        PeersAdapter adapter = new PeersAdapter(peerList, getParentFragmentManager());
         peersListView.setAdapter(adapter);
 
         binding.searchView.clearFocus();
@@ -125,9 +125,83 @@ public class PeersFragment extends Fragment {
         for (int i = 0; i < peersInfo.size(); i++) {
             PeerInfo peerInfo = peersInfo.get(i);
             Status status = Status.fromString(peerInfo.getConnStatus());
-            peerList.add(new Peer(status, peerInfo.getIP(), peerInfo.getFQDN()));
+            
+            // Get all available connection details from PeerInfo
+            String pubKey = safeGetString(peerInfo::getPubKey);
+            String localIceType = safeGetString(peerInfo::getLocalIceCandidateType);
+            String remoteIceType = safeGetString(peerInfo::getRemoteIceCandidateType);
+            String localIceEndpoint = safeGetString(peerInfo::getLocalIceCandidateEndpoint);
+            String remoteIceEndpoint = safeGetString(peerInfo::getRemoteIceCandidateEndpoint);
+            long bytesRx = safeGetLong(peerInfo::getBytesRx);
+            long bytesTx = safeGetLong(peerInfo::getBytesTx);
+            long latency = safeGetLong(peerInfo::getLatency);
+            boolean relayed = safeGetBoolean(peerInfo::getRelayed);
+            boolean direct = safeGetBoolean(peerInfo::getDirect);
+            String connStatusUpdate = safeGetString(peerInfo::getConnStatusUpdate);
+            String lastWgHandshake = safeGetString(peerInfo::getLastWireguardHandshake);
+            boolean rosenpassEnabled = safeGetBoolean(peerInfo::getRosenpassEnabled);
+            
+            peerList.add(new Peer(
+                status, 
+                peerInfo.getIP(), 
+                peerInfo.getFQDN(),
+                pubKey,
+                localIceType,
+                remoteIceType,
+                localIceEndpoint,
+                remoteIceEndpoint,
+                bytesRx,
+                bytesTx,
+                latency,
+                relayed,
+                direct,
+                connStatusUpdate,
+                lastWgHandshake,
+                rosenpassEnabled
+            ));
         }
         return peerList;
+    }
+
+    // Helper methods to safely get values from PeerInfo with fallback defaults
+    private String safeGetString(StringSupplier supplier) {
+        try {
+            String value = supplier.get();
+            return value != null ? value : "";
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    private long safeGetLong(LongSupplier supplier) {
+        try {
+            return supplier.get();
+        } catch (Exception e) {
+            return 0;
+        }
+    }
+
+    private boolean safeGetBoolean(BooleanSupplier supplier) {
+        try {
+            return supplier.get();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    @FunctionalInterface
+    interface StringSupplier {
+        String get() throws Exception;
+    }
+
+    @FunctionalInterface
+    interface LongSupplier {
+        long get() throws Exception;
+    }
+
+    @FunctionalInterface
+    interface BooleanSupplier {
+        boolean get() throws Exception;
     }
 
     private void updatePeerCount(PeerInfoArray peersInfo) {
