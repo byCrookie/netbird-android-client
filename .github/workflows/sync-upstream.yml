@@ -1,0 +1,57 @@
+name: Sync Upstream
+
+on:
+  schedule:
+    - cron: "0 2 * * *" # Daily at 2 AM UTC
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: false
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Sync with upstream
+        run: |
+          git remote add upstream https://github.com/netbirdio/android-client.git || true
+          git fetch upstream --tags
+
+          UPSTREAM_COMMIT=$(git rev-parse upstream/main)
+          FORK_COMMIT=$(git rev-parse origin/main)
+
+          COMMIT_COUNT=$(git rev-list --count HEAD..upstream/main)
+          echo "Found $COMMIT_COUNT new commits"
+
+          if [ "$COMMIT_COUNT" -gt 0 ]; then
+            BRANCH_NAME="upstream-sync-$(date +%Y%m%d-%H%M%S)"
+            git checkout -b $BRANCH_NAME
+            git merge upstream/main --no-edit
+            
+            # Update submodules to match upstream
+            git submodule update --init --recursive
+            
+            git push origin $BRANCH_NAME
+            
+            gh pr create \
+              --title "Sync with upstream: $COMMIT_COUNT commits" \
+              --body "Automated upstream sync" \
+              --base main \
+              --head $BRANCH_NAME
+          else
+            echo "Already up to date with upstream"
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

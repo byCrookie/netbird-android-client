@@ -1,8 +1,8 @@
 name: build release
 
-on:
-  release:
-    types: [published]
+# on:
+#   release:
+#     types: [published]
 
 jobs:
   build-release:
@@ -14,7 +14,6 @@ jobs:
       NETBIRD_UPLOAD_STORE_PASSWORD: ${{ secrets.NETBIRD_UPLOAD_STORE_PASSWORD }}
     outputs:
       apk_path: ${{ steps.build.outputs.apk_path }}
-      bundle_path: ${{ steps.build.outputs.bundle_path }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -53,7 +52,5 @@ jobs:
       - name: Upload files to existing release
         uses: softprops/action-gh-release@v1
         with:
-          files: |
-            ${{ steps.build.outputs.apk_path }}
-            ${{ steps.build.outputs.bundle_path }}
+          files: ${{ steps.build.outputs.apk_path }}
           tag_name: ${{ github.event.release.tag_name }}
