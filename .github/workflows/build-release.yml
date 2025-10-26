@@ -1,8 +1,14 @@
 name: build release
 
-# on:
-#   release:
-#     types: [published]
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version (e.g., 1.0.0)"
+        required: true
+        type: string
 
 jobs:
   build-release:
@@ -23,7 +29,13 @@ jobs:
       - name: Get version
         id: version
         run: |
-          TAG_NAME=${{ github.event.release.tag_name }}
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+            VERSION="${VERSION#v}"
+            TAG_NAME="v${VERSION}"
+          else
+            TAG_NAME=${{ github.event.release.tag_name }}
+          fi
           echo "version_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
       - name: Write google-services.json
@@ -49,7 +61,15 @@ jobs:
           version_code: ${{ steps.version_code.outputs.adjusted }}
           build_type: release
 
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-artifacts-${{ steps.version.outputs.version_name }}
+          path: ${{ steps.build.outputs.apk_path }}
+          retention-days: 30
+
       - name: Upload files to existing release
+        if: github.event_name == 'release'
         uses: softprops/action-gh-release@v1
         with:
           files: ${{ steps.build.outputs.apk_path }}
